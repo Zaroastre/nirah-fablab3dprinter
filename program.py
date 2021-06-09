@@ -4,7 +4,7 @@
 from threading import Thread;
 from os import listdir;
 from queue import Queue;
-from os import system;
+from os import system, chdir;
 
 class Application(Thread):
     def __init__(self, executable: str) -> None:
@@ -12,7 +12,7 @@ class Application(Thread):
         self.__executable: str = executable;
 
     def run(self):
-        system("start python {}".format(self.__executable));
+        system("python {}".format(self.__executable));
 
 
 def main():
@@ -31,11 +31,10 @@ def main():
     # Star web services.
     for APPLICATION in APPLICATIONS:
         APPLICATION.start();
-    
+
     # Wait while all web services are running.
     QUEUE = Queue(maxsize=len(APPLICATIONS));
     QUEUE.join();
 
 if __name__ == '__main__':
     main()
-    
