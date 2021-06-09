@@ -18,7 +18,7 @@
 
 ## **Liste des micro-services**
 
-### **1. Authentification**
+### **1. Authentification *(authentication/)***
 Micro-service en charge de l'authentification des utilisateurs pour le control des accès aux API. 
 
 	Session
@@ -27,7 +27,7 @@ Micro-service en charge de l'authentification des utilisateurs pour le control d
 		-> Modification
 		-> Suppression
 
-### **2. Espace Utilisateur**
+### **2. Espace Utilisateur *(userspace/)***
 Micro-service en charge de la consultation et gestion du profil des utilisateurs.
 
 	Utilisateur
@@ -36,7 +36,7 @@ Micro-service en charge de la consultation et gestion du profil des utilisateurs
 		-> Modification
 		-> Suppression
 
-### **3. Catalogue**
+### **3. Catalogue *(catalog/)***
 Micro-service en charge de la consultation et gestion du catalogue des différents objets imprimables.
 
 	Objet 3D
@@ -45,7 +45,7 @@ Micro-service en charge de la consultation et gestion du catalogue des différen
 		-> Modification
 		-> Suppression
 
-### **4. Panier**
+### **4. Panier *(basket/)***
 Micro-service en charge de la consultation, de la gestion et du traitement des commandes des utilisateurs.
 
 	Commande
@@ -54,7 +54,7 @@ Micro-service en charge de la consultation, de la gestion et du traitement des c
 		-> Modification
 		-> Suppression
 
-### **5. Paiement**
+### **5. Paiement *(payment/)***
 Micro-service en charge du paiement des commande des utilisateurs.
 
 	Paiment
@@ -64,7 +64,7 @@ Micro-service en charge du paiement des commande des utilisateurs.
 		-> Suppression
 
 
-### **6. Planning**
+### **6. Planning *(planner/)***
 Micro-service en charge de la plannification des impressions des utilisateurs.
 
 	Impression
@@ -73,7 +73,7 @@ Micro-service en charge de la plannification des impressions des utilisateurs.
 		-> Modification
 		-> Suppression
 
-### **7. Construction**
+### **7. Construction *(printing/)***
 Micro-service en charge d'informer les utilisateurs de l'état d'impression des objets 3D.
 
 	Impression d'objet 3D
@@ -82,7 +82,7 @@ Micro-service en charge d'informer les utilisateurs de l'état d'impression des 
 		-> Modification
 		-> Suppression
 
-### **8. Livraison**
+### **8. Livraison *(shipping/)***
 Micro-service en charge de gérer les livraisons (livraison à domicile (Drone),récupération sur site) des obets imprimés aux utilisateurs.
 
     Livraison

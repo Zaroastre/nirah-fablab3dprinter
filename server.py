@@ -1,9 +1,17 @@
 from threading import Thread;
+import logging;
 
 from bottle import Bottle, run, request, response
 from json import loads as json_loads
 from truckpad.bottle.cors import CorsPlugin, enable_cors
 
+LOG_FORMAT = "%(levelname)s %(asctime)s - %(message)s"
+logging.basicConfig(
+    filename="log.log", 
+    level=logging.DEBUG,
+    format=LOG_FORMAT
+    );
+LOGGER: logging.Logger  =logging.getLogger(__name__);
 
 class Server(Thread):
     HTTP_SERVER: Bottle = Bottle();
