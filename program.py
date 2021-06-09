@@ -4,14 +4,20 @@
 from threading import Thread;
 from os import listdir;
 from queue import Queue;
+from os import system;
 
 class Application(Thread):
     def __init__(self, executable: str) -> None:
-        pass
+        Thread.__init__(self);
+        self.__executable: str = executable;
+
+    def run(self):
+        system("start python {}".format(self.__executable));
+
 
 def main():
     # Detected web services.
-    WEB_SERVICE_FOLDER_PATH: str = "./webservices";
+    WEB_SERVICE_FOLDER_PATH: str = "webservices";
     REGISTRY_FOLDER: str = "registry";
     EXECUTABLE: str = "main.py";
     APPLICATIONS: list = [];
