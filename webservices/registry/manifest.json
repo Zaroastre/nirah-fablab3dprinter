@@ -1,0 +1,11 @@
+{
+	"GROUP_ID": "io.nirahtech",
+	"PROJECT_ID": "fablab3dprinter",
+	"ARTIFACT_ID": "registry",
+	"VERSION": "0.0.0-SNAPSHOT",
+
+	"HTTP_PORT": 9600,
+	"BASE_API": "/api/{%VERSION%}",
+
+	"LOG_LEVEL": "DEBUG"
+}

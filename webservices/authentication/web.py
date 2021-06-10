@@ -5,14 +5,62 @@ from truckpad.bottle.cors import CorsPlugin, enable_cors
 from json import loads, dumps;
 from os import system;
 from entity import User;
+from configuration import ApplicationConfiguration;
+import requests;
 
 class HttpWebService(Thread):
 
     HTTP_SERVER: Bottle = Bottle();
-    CONFIGURATION: dict = loads(open("{}{}".format(__file__.replace(__file__.split('/')[-1], ''), "manifest.json"), "r").read());
+    CONFIGURATION: dict = ApplicationConfiguration.load();
 
-    def __init__(self):
+    def __init__(self, bind_address: str = "0.0.0.0", bind_port: int = 9601):
         Thread.__init__(self);
+        self.__bind_address: str = bind_address;
+        self.__bind_port: str = bind_port;
+
+    def register(self, registry) -> bool:
+        version_response = None;
+        is_registered: bool = False;
+        try:
+            version_response = requests.get("http://{}/version".format(registry));
+        except Exception as error:
+            print(error);
+            pass
+        if (version_response != None):
+            if (version_response.status_code == 200):
+                registry_version = version_response.json().get("full");
+                registration_response = None;
+                try:
+                    registration_response = requests.post("http://{}/api/{}/applications/{}".format(registry, registry_version, HttpWebService.CONFIGURATION.get("ARTIFACT_ID")), json={});
+                except Exception as error:
+                    print(error);
+                    pass
+                if (registration_response != None):
+                    if (registration_response.status_code == 204):
+                        is_registered = True;
+        return is_registered;
+
+    def unregister(self, registry) -> bool:
+        version_response = None;
+        is_unregistered: bool = False;
+        try:
+            version_response = requests.get("http://{}/version".format(registry));
+        except Exception as error:
+            # print(error);
+            pass
+        if (version_response != None):
+            if (version_response.status_code == 200):
+                registry_version = version_response.json().get("full");
+                registration_response = None;
+                try:
+                    registration_response = requests.delete("http://{}/api/{}/applications/{}".format(registry, registry_version, HttpWebService.CONFIGURATION.get("ARTIFACT_ID")), json={});
+                except Exception as error:
+                    # print(error);
+                    pass
+                if (registration_response != None):
+                    if (registration_response.status_code == 204):
+                        is_unregistered = True;
+        return is_unregistered;
 
     @enable_cors
     @HTTP_SERVER.get("{}/test".format(CONFIGURATION.get("BASE_API").replace("{%VERSION%}", CONFIGURATION.get("VERSION"))))
@@ -23,5 +71,5 @@ class HttpWebService(Thread):
 
     def run(self):
         HttpWebService.HTTP_SERVER.install(CorsPlugin(origins=['*']));
-        run(HttpWebService.HTTP_SERVER, host="0.0.0.0", port=int(HttpWebService.CONFIGURATION.get("HTTP_PORT")));
+        run(HttpWebService.HTTP_SERVER, host=self.__bind_address, port=self.__bind_port);
 
