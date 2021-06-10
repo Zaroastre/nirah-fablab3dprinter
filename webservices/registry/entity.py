@@ -9,6 +9,23 @@ class WebService:
         self.version: str = None;
         self.host: str = None;
         self.port: int = None;
+    
+    @staticmethod
+    def parse(json: dict):
+        web_service: WebService = None;
+        if (json != None):
+            keys: dict = {};
+            for json_key in json.keys():
+                keys[json_key] = (json_key in WebService().__dict__.keys());
+            if (not False in keys.values()):
+                web_service = WebService();
+                web_service.group_id = json.get("group_id");
+                web_service.project_id = json.get("project_id");
+                web_service.artifact_id = json.get("artifact_id");
+                web_service.version = json.get("version");
+                web_service.host = json.get("host");
+                web_service.port = json.get("port");
+        return web_service;
 
 class Version:
     def __init__(self) -> None:
@@ -43,3 +60,8 @@ class Version:
                 version.build = int(version_parts[2]);
                 version.full = str(version);
         return version;
+
+class RestErrorResponse:
+    def __init__(self, ) -> None:
+        self.code: str = None;
+        self.reason: str = None;

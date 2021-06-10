@@ -4,7 +4,7 @@ from threading import Thread;
 from truckpad.bottle.cors import CorsPlugin, enable_cors
 from json import loads, dumps;
 from os import system;
-from entity import User;
+from entity import User, Version, WebService;
 from configuration import ApplicationConfiguration;
 import requests;
 
@@ -13,10 +13,16 @@ class HttpWebService(Thread):
     HTTP_SERVER: Bottle = Bottle();
     CONFIGURATION: dict = ApplicationConfiguration.load();
 
-    def __init__(self, bind_address: str = "0.0.0.0", bind_port: int = 9601):
+    def __init__(self, bind_address: str = "127.0.0.1", bind_port: int = 9601):
         Thread.__init__(self);
         self.__bind_address: str = bind_address;
         self.__bind_port: str = bind_port;
+        self.__properties: WebService = WebService();
+        self.__properties.group_id = HttpWebService.CONFIGURATION.get("GROUP_ID");
+        self.__properties.project_id = HttpWebService.CONFIGURATION.get("PROJECT_ID");
+        self.__properties.artifact_id = HttpWebService.CONFIGURATION.get("ARTIFACT_ID");
+        self.__properties.version = Version.parse(HttpWebService.CONFIGURATION.get("VERSION")).full;
+        self.__properties.port = int(HttpWebService.CONFIGURATION.get("HTTP_PORT"));
 
     def register(self, registry) -> bool:
         version_response = None;
@@ -31,7 +37,7 @@ class HttpWebService(Thread):
                 registry_version = version_response.json().get("full");
                 registration_response = None;
                 try:
-                    registration_response = requests.post("http://{}/api/{}/applications/{}".format(registry, registry_version, HttpWebService.CONFIGURATION.get("ARTIFACT_ID")), json={});
+                    registration_response = requests.post("http://{}/api/{}/applications/{}".format(registry, registry_version, HttpWebService.CONFIGURATION.get("ARTIFACT_ID")), json=self.__properties.__dict__);
                 except Exception as error:
                     print(error);
                     pass
